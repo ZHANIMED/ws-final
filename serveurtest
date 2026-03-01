@@ -1,0 +1,36 @@
+// server.js
+
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
+
+// création d'instance
+const app = express();
+
+// middlewares
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true
+}));
+
+app.use(express.json());
+
+// connexion DB
+const connectDB = require("./config/connectDB");
+connectDB();
+
+// routes
+app.use("/api/user", require("./routes/user"));
+app.use("/api/food", require("./routes/food"));
+
+// port
+const PORT = process.env.PORT || 9876;
+
+// serveur
+app.listen(PORT, (error) => {
+  if (error) {
+    console.error(`Fail to connect: ${error}`);
+  } else {
+    console.log(`Server is running at http://localhost:${PORT}`);
+  }
+});
